@@ -47,13 +47,17 @@ class Stage:
         self.item2ExScore = 0
     def stageItem1Winner(self):
         if self.fullStage():
-            newRating = self.item1.rating + 32*(1-self.item1ExScore)
-            self.item1.updateStats(newRating)
+            newRating1 = self.item1.rating + 32*(1-self.item1ExScore)
+            self.item1.updateStats(newRating1)
+            newRating2 = self.item2.rating + 32*(0-self.item2ExScore)
+            self.item1.updateStats(newRating2)
 
     def stageItem2Winner(self):
         if self.fullstage():
-            newRating = self.item2.rating + 32*(1-self.item2ExScore)
-            self.item2.updateStats(newRating)
+            newRatin2 = self.item2.rating + 32*(1-self.item2ExScore)
+            self.item2.updateStats(newRatin2)
+            newRating1 = self.item1.rating + 32*(0-self.item1ExScore)
+            self.item1.updateStats(newRating1)
 
     def fullStage(self):
         if self.item1 == None or self.item2 == None:

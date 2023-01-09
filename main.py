@@ -1,4 +1,4 @@
-from guizero import App
+from guizero import App,PushButton,Text,Box,Picture
 from os import walk,rename
 from random import shuffle
 
@@ -122,17 +122,48 @@ def chooseCompetitors():
     final_options.append(options[chosen_index])
     return final_options
 
-
+#GUIZERO functions
 def item1Winner():
     mainStage.stageItem1Winner()
 
 def item2Winner():
     mainStage.stageItem2Winner()
 
+#GUI changing page function
+def home_to_settings():
+    home_box.hide()
+    settings_box.show()
+
+def settings_to_home():
+    settings_box.hide()
+    home_box.show()
+
+def home_to_comp():
+    home_box.hide()
+    comp_box.show()
+
+def comp_to_home():
+    comp_box.hide()
+    home_box.show()
+
 
 
 mainStage = Stage()
-app = App(title="Elo ranking")
+app = App(title="Elo ranking",bg="light grey",height=720,width=1080)
+home_box = Box(master=app,layout="grid",visible=True)
+home_title = Text(master=home_box,text="Welcome to Elo Ranking",grid=[5,0],size=30,font="courier new")
+home_start_btn = PushButton(master=home_box,text="Start",grid=[10,10],padx=10,pady=10,command=home_to_comp)
+home_settings_btn = PushButton(master=home_box,text="Settings",grid=[0,10],command=home_to_settings,padx=10,pady=10)
+
+settings_box = Box(master=app,layout="grid",visible=False)
+settings_title = Text(master=settings_box,text="Settings",grid=[5,0],size=30,font="courier new")
+settings_home_btn = PushButton(master=settings_box,text="Home",grid=[0,10],command=settings_to_home,padx=10,pady=10)
+
+comp_box = Box(master=app,layout="grid",visible=False)
+comp_home_button = PushButton(master=comp_box,text="Home",grid=[0,10],command=comp_to_home,padx=10,pady=10)
+comp_title = Text(master=settings_box,text="Competitive",grid=[5,0],size=30,font="courier new")
+picture1 = Picture(master=comp_box,grid=[2,2],image=PATH+mainStage.item1.name)
+picture2 = Picture(master=comp_box,grid=[4,2],image=PATH+mainStage.item2.name)
 
 app.display()
 

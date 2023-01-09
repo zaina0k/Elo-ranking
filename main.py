@@ -1,5 +1,6 @@
-# from guizero import App
+from guizero import App
 from os import walk,rename
+from random import shuffle
 
 PATH = "photos/"
 filenames = next(walk(PATH), (None, None, []))[2]  # [] if no file
@@ -94,32 +95,46 @@ def initialisePopulation():
     for i in range(len(filenames)):
         population.append(Item(filenames[i]))
 
+def chooseCompetitors():
+    global population
+    options = []
+    final_options = []
+    dif = []
+    average_element_pool = 3 #number of elements used to create the average
+    #shuffling the list so that they are in random positions
+    population = shuffle(population)
+    final_options.append(population[0])#first element becomes reference item
+    #loop creates a set of randomly chosen items
+    for i in range(len(population)):
+        if i>average_element_pool:
+            break
+        elif i == 0:
+            pass
+        else:
+            options.append(population[i])
+    baseline = final_options[0]
+    #compare each of the randomly chosen items to the reference item
+    #this allows for random selection but also allowing some rating based matchmaking
+    for i in range(len(options)):
+        comparitor = options[i]
+        dif.append(abs(baseline.rating - comparitor.rating))
+    chosen_index = dif.index(min(dif))
+    final_options.append(options[chosen_index])
+    return final_options
+
+
 def item1Winner():
     mainStage.stageItem1Winner()
 
 def item2Winner():
     mainStage.stageItem2Winner()
 
+
+
 mainStage = Stage()
+app = App(title="Elo ranking")
 
-item1 = Item("hello")
-item2 = Item("world")
-item1.rating= 1656
-item2.rating= 1763
-
-mainStage.setStage(item1,item2)
-
-print(item1)
-print(item2)
-
-print(mainStage)
-
-item1Winner()
-
-print(item1)
-print(item2)
-
-
+app.display()
 
 
 

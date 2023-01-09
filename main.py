@@ -18,7 +18,10 @@ class Item:
         self.ratingHistory.clear()
     def updateStats(self,newRating):
         self.ratingHistory.append(self.rating)
-        self.rating = newRating
+        if newRating <= 0:
+            self.rating = 0
+        else:
+            self.rating = round(newRating)
     def __str__(self):
         print_str = ""
         print_str += "Name: " + str(self.name) + "\n"
@@ -50,12 +53,12 @@ class Stage:
             newRating1 = self.item1.rating + 32*(1-self.item1ExScore)
             self.item1.updateStats(newRating1)
             newRating2 = self.item2.rating + 32*(0-self.item2ExScore)
-            self.item1.updateStats(newRating2)
+            self.item2.updateStats(newRating2)
 
     def stageItem2Winner(self):
         if self.fullstage():
-            newRatin2 = self.item2.rating + 32*(1-self.item2ExScore)
-            self.item2.updateStats(newRatin2)
+            newRating2 = self.item2.rating + 32*(1-self.item2ExScore)
+            self.item2.updateStats(newRating2)
             newRating1 = self.item1.rating + 32*(0-self.item1ExScore)
             self.item1.updateStats(newRating1)
 
@@ -101,7 +104,8 @@ mainStage = Stage()
 
 item1 = Item("hello")
 item2 = Item("world")
-item1.rating= 1100
+item1.rating= 1656
+item2.rating= 1763
 
 mainStage.setStage(item1,item2)
 

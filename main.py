@@ -40,6 +40,11 @@ def initialisePopulation():
         population.append(Item(filenames[i]))
 
 
+initialisePopulation()
+input(len(population))
+for i in range(len(population)):
+    print(population[i])
+
 
 
 

@@ -55,14 +55,12 @@ class Stage:
             self.item1.updateStats(newRating1)
             newRating2 = self.item2.rating + 32*(0-self.item2ExScore)
             self.item2.updateStats(newRating2)
-
     def stageItem2Winner(self):
-        if self.fullstage():
+        if self.fullStage():
             newRating2 = self.item2.rating + 32*(1-self.item2ExScore)
             self.item2.updateStats(newRating2)
             newRating1 = self.item1.rating + 32*(0-self.item1ExScore)
             self.item1.updateStats(newRating1)
-
     def fullStage(self):
         if self.item1 == None or self.item2 == None:
             return False
@@ -103,7 +101,6 @@ def chooseCompetitors():
     average_element_pool = 3 #number of elements used to create the average
     #shuffling the list so that they are in random positions
     shuffle(population)
-    print(len(population))
     final_options.append(population[0])#first element becomes reference item
     #loop creates a set of randomly chosen items
     for i in range(len(population)):
@@ -120,15 +117,29 @@ def chooseCompetitors():
         comparitor = options[i]
         dif.append(abs(baseline.rating - comparitor.rating))
     chosen_index = dif.index(min(dif))
+    if options[chosen_index] == baseline:
+        final_options.append(options[chosen_index+1])
     final_options.append(options[chosen_index])
     return final_options
 
 #GUIZERO functions
 def item1Winner():
     mainStage.stageItem1Winner()
+    nextComp()
 
 def item2Winner():
     mainStage.stageItem2Winner()
+    nextComp()
+
+def resetPhotos():
+    picture1.image=PATH+mainStage.item1.name
+    picture2.image=PATH+mainStage.item2.name
+
+def nextComp():
+    newPics = chooseCompetitors()
+    mainStage.resetStage()
+    mainStage.setStage(newPics[0],newPics[1])
+    resetPhotos()
 
 #GUI changing page function
 def home_to_settings():

@@ -14,12 +14,27 @@ class Item:
         self.rating = 1500
     def resetHistory(self):
         self.ratingHistory.clear()
+    def updateStats(self,newRating):
+        self.ratingHistory.append(self.rating)
+        self.rating = newRating
     def __str__(self):
         print_str = ""
         print_str += "Name: " + str(self.name) + "\n"
         print_str += "Rating: " + str(self.rating) + "\n"
         print_str += "Rating history: " + str(self.ratingHistory) + "\n"
         return(print_str)
+
+class Stage:
+    def __init__(self):
+        self.item1 = None
+        self.item2 = None
+    def setStage(self,comp1,comp2):
+        self.item1 = comp1
+        self.item2 = comp2
+    def resetStage(self):
+        self.item1 = None
+        self.item2 = None
+
 
 def changeFileName(originalname,newname,path,fileEnding):
     filenames = next(walk(path), (None, None, []))[2]  # [] if no file
@@ -40,10 +55,6 @@ def initialisePopulation():
         population.append(Item(filenames[i]))
 
 
-initialisePopulation()
-input(len(population))
-for i in range(len(population)):
-    print(population[i])
 
 
 

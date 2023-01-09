@@ -2,7 +2,7 @@ from guizero import App,PushButton,Text,Box,Picture
 from os import walk,rename
 from random import shuffle
 
-PATH = "photos/"
+PATH = "temp/"
 filenames = next(walk(PATH), (None, None, []))[2]  # [] if no file
 population = []
 
@@ -102,7 +102,8 @@ def chooseCompetitors():
     dif = []
     average_element_pool = 3 #number of elements used to create the average
     #shuffling the list so that they are in random positions
-    population = shuffle(population)
+    shuffle(population)
+    print(len(population))
     final_options.append(population[0])#first element becomes reference item
     #loop creates a set of randomly chosen items
     for i in range(len(population)):
@@ -146,10 +147,12 @@ def comp_to_home():
     comp_box.hide()
     home_box.show()
 
-
-
+initialisePopulation()
 mainStage = Stage()
-app = App(title="Elo ranking",bg="light grey",height=720,width=1080)
+testitems = chooseCompetitors()
+mainStage.setStage(testitems[0],testitems[1])
+
+app = App(title="Elo ranking",bg="light grey",height=1000,width=1500)
 home_box = Box(master=app,layout="grid",visible=True)
 home_title = Text(master=home_box,text="Welcome to Elo Ranking",grid=[5,0],size=30,font="courier new")
 home_start_btn = PushButton(master=home_box,text="Start",grid=[10,10],padx=10,pady=10,command=home_to_comp)
@@ -162,8 +165,11 @@ settings_home_btn = PushButton(master=settings_box,text="Home",grid=[0,10],comma
 comp_box = Box(master=app,layout="grid",visible=False)
 comp_home_button = PushButton(master=comp_box,text="Home",grid=[0,10],command=comp_to_home,padx=10,pady=10)
 comp_title = Text(master=settings_box,text="Competitive",grid=[5,0],size=30,font="courier new")
-picture1 = Picture(master=comp_box,grid=[2,2],image=PATH+mainStage.item1.name)
-picture2 = Picture(master=comp_box,grid=[4,2],image=PATH+mainStage.item2.name)
+picture1 = Picture(master=comp_box,grid=[2,2],image=PATH+mainStage.item1.name,width=480,height=854)
+picture2 = Picture(master=comp_box,grid=[4,2],image=PATH+mainStage.item2.name,width=480,height=854)
+comp1_btn = PushButton(master=comp_box,text="OPTION 1",grid=[1,2],command=item1Winner,padx=10,pady=10)
+comp2_btn = PushButton(master=comp_box,text="OPTION 2",grid=[5,2],command=item2Winner,padx=10,pady=10)
+
 
 app.display()
 

@@ -2,6 +2,7 @@ from guizero import App,PushButton,Text,Box,Picture
 from os import walk,rename
 from random import shuffle
 import matplotlib. pyplot as plt
+from operator import itemgetter
 
 PATH = "temp/"
 filenames = next(walk(PATH), (None, None, []))[2]  # [] if no file
@@ -137,6 +138,18 @@ def chooseCompetitors(stage=None):
     final_options.append(options[chosen_index])
     return final_options
 
+def totalRankingsGraph():
+    """looks for the top 5 ratings
+    pairs item names as key with their rating as value in a dictionary"""
+    global population
+    for i in range(len(population)):
+        population[i].rating = i
+    rankDict = {}
+    for item in population:
+        rankDict[item.name] = item.rating
+    top5Dict = dict(sorted(rankDict.items(), key = itemgetter(1), reverse = True)[:5])
+    return top5Dict
+
 #GUIZERO functions
 def item1Winner():
     mainStage.stageItem1Winner()
@@ -155,6 +168,22 @@ def nextComp():
     mainStage.resetStage()
     mainStage.setStage(newPics[0],newPics[1])
     resetPhotos()
+
+def displayTop5Ratings():
+    global top5_rated_text_list
+    top5Dict = totalRankingsGraph()
+    counter = 0
+    for item in top5Dict:
+        counter += 1
+        if counter >5:
+            break
+        else:
+            top5_rated_text_list[counter-1].value = str(counter) + ". " + str(item) + ": " + str(top5Dict[item])
+    settings_box.hide()
+    top5_ratings_box.show()
+    
+
+
 
 #GUI changing page function
 def home_to_settings():
@@ -176,11 +205,17 @@ def comp_to_home():
 def quit_app():
     app.destroy()
 
+def top5_to_settings():
+    top5_ratings_box.hide()
+    settings_box.show()
 
+##START##
 initialisePopulation()
 mainStage = Stage()
 initialItems = chooseCompetitors()
 mainStage.setStage(initialItems[0],initialItems[1])
+
+totalRankingsGraph()
 
 app = App(title="Elo ranking",bg="light grey",height=1000,width=1500)
 home_box = Box(master=app,layout="grid",visible=True)
@@ -192,6 +227,20 @@ home_quit_btn = PushButton(master=home_box,text="Quit",grid=[0,10],command=quit_
 settings_box = Box(master=app,layout="grid",visible=False)
 settings_title = Text(master=settings_box,text="Settings",grid=[5,0],size=30,font="courier new")
 settings_home_btn = PushButton(master=settings_box,text="Home",grid=[0,10],command=settings_to_home,padx=10,pady=10)
+settings_top5_btn = PushButton(master=settings_box,text="Display top 5 rated",grid=[5,5],command=displayTop5Ratings,padx=10,pady=10)
+
+top5_ratings_box = Box(master=app,layout="grid",visible=False)
+top5_rating_title = Text(master=top5_ratings_box,text="Top 5 Rated Items",grid=[0,0],size=30,font="courier new")
+top5_rated_1 = Text(master=top5_ratings_box,text="1.",grid=[0,2],size=30,font="courier new",align="left")
+top5_rated_2 = Text(master=top5_ratings_box,text="2.",grid=[0,3],size=30,font="courier new",align="left")
+top5_rated_3 = Text(master=top5_ratings_box,text="3.",grid=[0,4],size=30,font="courier new",align="left")
+top5_rated_4 = Text(master=top5_ratings_box,text="4.",grid=[0,5],size=30,font="courier new",align="left")
+top5_rated_5 = Text(master=top5_ratings_box,text="5.",grid=[0,6],size=30,font="courier new",align="left")
+top5_rated_text_list = [top5_rated_1,top5_rated_2,top5_rated_3,top5_rated_4,top5_rated_5]
+top5_rat_to_settings = PushButton(master=top5_ratings_box,text="Back",grid=[0,10],command=top5_to_settings,padx=10,pady=10)
+
+
+
 
 comp_box = Box(master=app,layout="grid",visible=False)
 comp_home_button = PushButton(master=comp_box,text="Home",grid=[0,10],command=comp_to_home,padx=10,pady=10)

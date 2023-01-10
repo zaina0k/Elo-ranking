@@ -34,10 +34,11 @@ class Item:
 class Stage:
     """stage class allows for 2 objects to be set up for comparison"""
     def __init__(self):
-        self.item1 = None
-        self.item2 = None
-        self.item1ExScore = 0
-        self.item2ExScore = 0
+        self.item1 = None#first item
+        self.item2 = None#second item
+        self.item1ExScore = 0#item expected score according to ranking
+        self.item2ExScore = 0#item expected score according to ranking
+        self.previousItem = None#previous item 1. used to ensure two rounds arent the same in a row
     def setStage(self,comp1,comp2):
         self.item1 = comp1
         self.item2 = comp2
@@ -46,6 +47,7 @@ class Stage:
         self.item1ExScore = 1/(1+10**((rat2-rat1)/400))
         self.item2ExScore = 1/(1+10**((rat1-rat2)/400))
     def resetStage(self):
+        self.previousItem=self.item1
         self.item1 = None
         self.item2 = None
         self.item1ExScore = 0
@@ -94,7 +96,7 @@ def initialisePopulation():
     for i in range(len(filenames)):
         population.append(Item(filenames[i]))
 
-def chooseCompetitors():
+def chooseCompetitors(stage=None):
     global population
     options = []
     final_options = []
@@ -102,7 +104,15 @@ def chooseCompetitors():
     average_element_pool = 3 #number of elements used to create the average
     #shuffling the list so that they are in random positions
     shuffle(population)
-    final_options.append(population[0])#first element becomes reference item
+    #makes sure that the previous item1 and new item1 are not the same
+    #both items do not need to be checked. only 1 needs to be different between rounds.
+    if stage != None:
+        if stage.previousItem == population[0]:
+            final_options.append(population[-1])
+        else:
+            final_options.append(population[0])#first element becomes reference item
+    else:
+        final_options.append(population[0])#first element becomes reference item
     #loop creates a set of randomly chosen items
     for i in range(len(population)):
         if i>average_element_pool:
@@ -137,7 +147,7 @@ def resetPhotos():
     picture2.image=PATH+mainStage.item2.name
 
 def nextComp():
-    newPics = chooseCompetitors()
+    newPics = chooseCompetitors(mainStage)
     mainStage.resetStage()
     mainStage.setStage(newPics[0],newPics[1])
     resetPhotos()
@@ -159,18 +169,23 @@ def comp_to_home():
     comp_box.hide()
     home_box.show()
 
+def quit_app():
+    app.destroy()
 
 
 initialisePopulation()
 mainStage = Stage()
-testitems = chooseCompetitors()
-mainStage.setStage(testitems[0],testitems[1])
+initialItems = chooseCompetitors()
+mainStage.setStage(initialItems[0],initialItems[1])
+
+
 
 app = App(title="Elo ranking",bg="light grey",height=1000,width=1500)
 home_box = Box(master=app,layout="grid",visible=True)
 home_title = Text(master=home_box,text="Welcome to Elo Ranking",grid=[5,0],size=30,font="courier new")
 home_start_btn = PushButton(master=home_box,text="Start",grid=[10,10],padx=10,pady=10,command=home_to_comp)
-home_settings_btn = PushButton(master=home_box,text="Settings",grid=[0,10],command=home_to_settings,padx=10,pady=10)
+home_settings_btn = PushButton(master=home_box,text="Settings",grid=[5,10],command=home_to_settings,padx=10,pady=10)
+home_quit_btn = PushButton(master=home_box,text="Quit",grid=[0,10],command=quit_app,padx=10,pady=10)
 
 settings_box = Box(master=app,layout="grid",visible=False)
 settings_title = Text(master=settings_box,text="Settings",grid=[5,0],size=30,font="courier new")

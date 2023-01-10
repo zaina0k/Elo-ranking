@@ -142,13 +142,16 @@ def totalRankingsGraph():
     """looks for the top 5 ratings
     pairs item names as key with their rating as value in a dictionary"""
     global population
-    for i in range(len(population)):
-        population[i].rating = i
     rankDict = {}
     for item in population:
         rankDict[item.name] = item.rating
     top5Dict = dict(sorted(rankDict.items(), key = itemgetter(1), reverse = True)[:5])
     return top5Dict
+
+def simulateRankedPlay(num):
+    for i in range(num):
+        item1Winner()
+
 
 #GUIZERO functions
 def item1Winner():
@@ -181,7 +184,26 @@ def displayTop5Ratings():
             top5_rated_text_list[counter-1].value = str(counter) + ". " + str(item) + ": " + str(top5Dict[item])
     settings_box.hide()
     top5_ratings_box.show()
-    
+
+def plotHistory(object=None):
+    simulateRankedPlay(100)
+    for item in population:
+        print(item)
+
+    mx = 0
+    for item in population:
+        if len(item.ratingHistory)>mx:
+            mx = len(item.ratingHistory)
+            object = item
+
+
+    if object==None:
+        return None
+    else:
+        rankHistory = object.ratingHistory
+        plt.plot(rankHistory)
+        plt.show()
+
 #GUI changing page function
 def home_to_settings():
     home_box.hide()
@@ -220,8 +242,8 @@ mainStage = Stage()
 initialItems = chooseCompetitors()
 mainStage.setStage(initialItems[0],initialItems[1])
 
-totalRankingsGraph()
 
+#Home Page
 app = App(title="Elo ranking",bg="light grey",height=1000,width=1500)
 home_box = Box(master=app,layout="grid",visible=True)
 home_title = Text(master=home_box,text="Welcome to Elo Ranking",grid=[5,0],size=30,font="courier new")
@@ -229,12 +251,14 @@ home_start_btn = PushButton(master=home_box,text="Start",grid=[10,10],padx=10,pa
 home_settings_btn = PushButton(master=home_box,text="Settings",grid=[5,10],command=home_to_settings,padx=10,pady=10)
 home_quit_btn = PushButton(master=home_box,text="Quit",grid=[0,10],command=quit_app,padx=10,pady=10)
 
+#Settings page
 settings_box = Box(master=app,layout="grid",visible=False)
 settings_title = Text(master=settings_box,text="Settings",grid=[5,0],size=30,font="courier new")
 settings_home_btn = PushButton(master=settings_box,text="Home",grid=[0,10],command=settings_to_home,padx=10,pady=10)
 settings_top5_btn = PushButton(master=settings_box,text="Display top 5 rated",grid=[5,5],command=displayTop5Ratings,padx=10,pady=10)
 settings_rank_history_btn = PushButton(master=settings_box,text="Individual item rank history",grid=[6,5],command=settings_to_rank_history,padx=10,pady=10)
 
+#Top 5 ratings page
 top5_ratings_box = Box(master=app,layout="grid",visible=False)
 top5_rating_title = Text(master=top5_ratings_box,text="Top 5 Rated Items",grid=[0,0],size=30,font="courier new")
 top5_rated_1 = Text(master=top5_ratings_box,text="1.",grid=[0,2],size=30,font="courier new",align="left")
@@ -245,12 +269,13 @@ top5_rated_5 = Text(master=top5_ratings_box,text="5.",grid=[0,6],size=30,font="c
 top5_rated_text_list = [top5_rated_1,top5_rated_2,top5_rated_3,top5_rated_4,top5_rated_5]
 top5_rat_to_settings = PushButton(master=top5_ratings_box,text="Back",grid=[0,10],command=top5_to_settings,padx=10,pady=10)
 
+#Rank history page
 rank_history_box = Box(master=app,layout="grid",visible=False)
 rank_history_title = Text(master=rank_history_box,text="Rank history",grid=[0,0],size=30,font="courier new",align="left")
 rank_his_to_settings = PushButton(master=rank_history_box,text="Back",grid=[0,10],command=rank_history_to_settings,padx=10,pady=10)
+rank_his_show_btn = PushButton(master=rank_history_box,text="Show",grid=[5,5],command=plotHistory,padx=10,pady=10)
 
-
-
+#Comparing items page
 comp_box = Box(master=app,layout="grid",visible=False)
 comp_home_button = PushButton(master=comp_box,text="Home",grid=[0,10],command=comp_to_home,padx=10,pady=10)
 comp_title = Text(master=settings_box,text="Competitive",grid=[5,0],size=30,font="courier new")

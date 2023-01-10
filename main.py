@@ -5,6 +5,7 @@ import matplotlib. pyplot as plt
 
 PATH = "temp/"
 filenames = next(walk(PATH), (None, None, []))[2]  # [] if no file
+filenames.remove(".DS_Store")
 population = []
 
 class Item:
@@ -177,8 +178,6 @@ initialisePopulation()
 mainStage = Stage()
 initialItems = chooseCompetitors()
 mainStage.setStage(initialItems[0],initialItems[1])
-
-
 
 app = App(title="Elo ranking",bg="light grey",height=1000,width=1500)
 home_box = Box(master=app,layout="grid",visible=True)

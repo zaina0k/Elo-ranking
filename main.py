@@ -5,7 +5,10 @@ import matplotlib. pyplot as plt
 
 PATH = "temp/"
 filenames = next(walk(PATH), (None, None, []))[2]  # [] if no file
-filenames.remove(".DS_Store")
+try:
+    filenames.remove(".DS_Store")
+except:
+    pass
 population = []
 
 class Item:

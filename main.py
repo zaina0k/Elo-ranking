@@ -1,6 +1,7 @@
 from guizero import App,PushButton,Text,Box,Picture
 from os import walk,rename
 from random import shuffle
+import matplotlib. pyplot as plt
 
 PATH = "temp/"
 filenames = next(walk(PATH), (None, None, []))[2]  # [] if no file
@@ -158,6 +159,8 @@ def comp_to_home():
     comp_box.hide()
     home_box.show()
 
+
+
 initialisePopulation()
 mainStage = Stage()
 testitems = chooseCompetitors()
@@ -181,11 +184,4 @@ picture2 = Picture(master=comp_box,grid=[4,2],image=PATH+mainStage.item2.name,wi
 comp1_btn = PushButton(master=comp_box,text="OPTION 1",grid=[1,2],command=item1Winner,padx=10,pady=10)
 comp2_btn = PushButton(master=comp_box,text="OPTION 2",grid=[5,2],command=item2Winner,padx=10,pady=10)
 
-
 app.display()
-
-
-
-
-
-

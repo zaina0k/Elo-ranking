@@ -1,3 +1,4 @@
-my_list = [1,1,1,2,3]
-
-print(my_list.index(min(my_list)))
+import matplotlib. pyplot as plt
+dots =[1,2,3,4,5]
+plt.plot(dots) 
+plt.show()

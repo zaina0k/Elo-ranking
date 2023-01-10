@@ -182,9 +182,6 @@ def displayTop5Ratings():
     settings_box.hide()
     top5_ratings_box.show()
     
-
-
-
 #GUI changing page function
 def home_to_settings():
     home_box.hide()
@@ -209,6 +206,14 @@ def top5_to_settings():
     top5_ratings_box.hide()
     settings_box.show()
 
+def settings_to_rank_history():
+    settings_box.hide()
+    rank_history_box.show()
+
+def rank_history_to_settings():
+    rank_history_box.hide()
+    settings_box.show() 
+
 ##START##
 initialisePopulation()
 mainStage = Stage()
@@ -228,6 +233,7 @@ settings_box = Box(master=app,layout="grid",visible=False)
 settings_title = Text(master=settings_box,text="Settings",grid=[5,0],size=30,font="courier new")
 settings_home_btn = PushButton(master=settings_box,text="Home",grid=[0,10],command=settings_to_home,padx=10,pady=10)
 settings_top5_btn = PushButton(master=settings_box,text="Display top 5 rated",grid=[5,5],command=displayTop5Ratings,padx=10,pady=10)
+settings_rank_history_btn = PushButton(master=settings_box,text="Individual item rank history",grid=[6,5],command=settings_to_rank_history,padx=10,pady=10)
 
 top5_ratings_box = Box(master=app,layout="grid",visible=False)
 top5_rating_title = Text(master=top5_ratings_box,text="Top 5 Rated Items",grid=[0,0],size=30,font="courier new")
@@ -239,6 +245,9 @@ top5_rated_5 = Text(master=top5_ratings_box,text="5.",grid=[0,6],size=30,font="c
 top5_rated_text_list = [top5_rated_1,top5_rated_2,top5_rated_3,top5_rated_4,top5_rated_5]
 top5_rat_to_settings = PushButton(master=top5_ratings_box,text="Back",grid=[0,10],command=top5_to_settings,padx=10,pady=10)
 
+rank_history_box = Box(master=app,layout="grid",visible=False)
+rank_history_title = Text(master=rank_history_box,text="Rank history",grid=[0,0],size=30,font="courier new",align="left")
+rank_his_to_settings = PushButton(master=rank_history_box,text="Back",grid=[0,10],command=rank_history_to_settings,padx=10,pady=10)
 
 
 

@@ -157,14 +157,14 @@ def simulateRankedPlay(num):
 def item1Winner():
     mainStage.stageItem1Winner()
     nextComp()
-
 def item2Winner():
     mainStage.stageItem2Winner()
     nextComp()
-
 def resetPhotos():
     picture1.image=PATH+mainStage.item1.name
     picture2.image=PATH+mainStage.item2.name
+    pic_name1.value = mainStage.item1.name
+    pic_name2.value = mainStage.item2.name
 
 def nextComp():
     newPics = chooseCompetitors(mainStage)
@@ -189,6 +189,7 @@ def plotHistory(object=None):
     for item in population:
         if item.name == rank_his_dropdown.value:
             rank_his_picture.image=PATH+item.name
+            rank_his_cur_rank.value = "Current Rank: " + str(item.rating)
             object = item
     if object==None:
         return None
@@ -208,7 +209,6 @@ def dev_simulate_button():
     else:
         print("enter a number into the text box")
 
-
 #GUI changing page function
 def home_to_settings():
     home_box.hide()
@@ -221,6 +221,8 @@ def settings_to_home():
 def home_to_comp():
     home_box.hide()
     comp_box.show()
+    pic_name1.value = mainStage.item1.name
+    pic_name2.value = mainStage.item2.name
 
 def comp_to_home():
     comp_box.hide()
@@ -254,7 +256,6 @@ initialisePopulation()
 mainStage = Stage()
 initialItems = chooseCompetitors()
 mainStage.setStage(initialItems[0],initialItems[1])
-
 
 #Home Page
 app = App(title="Elo ranking",bg="dark grey",height=1000,width=1500)
@@ -290,6 +291,7 @@ rank_his_to_settings = PushButton(master=rank_history_box,text="Back",grid=[0,10
 rank_his_show_btn = PushButton(master=rank_history_box,text="Show",grid=[5,5],command=plotHistory,padx=10,pady=10)
 rank_his_dropdown = Combo(master=rank_history_box,options=filenames,grid=[4,5])
 rank_his_picture = Picture(master=rank_history_box,grid=[10,5],width=480,height=854)
+rank_his_cur_rank = Text(master=rank_history_box,text="",grid=[10,6],size=30,font="courier new",align="left")
 
 #Developer page
 dev_box = Box(master=app,layout="grid",visible=False)
@@ -297,13 +299,17 @@ dev_title = Text(master=dev_box,text="Dev options",grid=[0,0],size=30,font="cour
 dev_simulate = PushButton(master=dev_box,text="Simulate",grid=[1,5],command=dev_simulate_button,padx=10,pady=10)###
 dev_sim_input = TextBox(master=dev_box,grid=[0,5])
 dev_to_settings_btn = PushButton(master=dev_box,text="Back",grid=[0,10],command=dev_to_settings,padx=10,pady=10)
+dev_reset_btn = PushButton(master=dev_box,text="FULL RESET",grid=[0,6],command=fullReset,padx=10,pady=10)
 
 #Comparing items page
 comp_box = Box(master=app,layout="grid",visible=False)
 comp_home_button = PushButton(master=comp_box,text="Home",grid=[0,10],command=comp_to_home,padx=10,pady=10)
 comp_title = Text(master=comp_box,text="Competitive",grid=[1,0],size=30,font="courier new")
-picture1 = Picture(master=comp_box,grid=[2,2],image=PATH+mainStage.item1.name,width=480,height=854)
-picture2 = Picture(master=comp_box,grid=[4,2],image=PATH+mainStage.item2.name,width=480,height=854)
+picture1 = Picture(master=comp_box,grid=[2,2],image=PATH+mainStage.item1.name,width=480,height=854,align="right")
+picture2 = Picture(master=comp_box,grid=[4,2],image=PATH+mainStage.item2.name,width=480,height=854,align="left")
+pic_name1 = Text(master=comp_box,text="Picture 1",grid=[2,3],size=30,font="courier new")
+pic_name2 = Text(master=comp_box,text="Picture 2",grid=[4,3],size=30,font="courier new")
+
 comp1_btn = PushButton(master=comp_box,text="OPTION 1",grid=[1,2],command=item1Winner,padx=10,pady=10,align="right")
 comp2_btn = PushButton(master=comp_box,text="OPTION 2",grid=[5,2],command=item2Winner,padx=10,pady=10)
 

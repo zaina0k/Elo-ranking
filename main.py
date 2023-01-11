@@ -1,4 +1,4 @@
-from guizero import App,PushButton,Text,Box,Picture,TextBox
+from guizero import App,PushButton,Text,Box,Picture,TextBox,Combo
 from os import walk,rename
 from random import shuffle
 import matplotlib. pyplot as plt
@@ -186,16 +186,10 @@ def displayTop5Ratings():
     top5_ratings_box.show()
 
 def plotHistory(object=None):
-    ###needs to be changed
-    simulateRankedPlay(100)
     for item in population:
-        print(item)
-    mx = 0
-    for item in population:
-        if len(item.ratingHistory)>mx:
-            mx = len(item.ratingHistory)
+        if item.name == rank_his_dropdown.value:
+            rank_his_picture.image=PATH+item.name
             object = item
-    #######################
     if object==None:
         return None
     else:
@@ -294,6 +288,8 @@ rank_history_box = Box(master=app,layout="grid",visible=False)
 rank_history_title = Text(master=rank_history_box,text="Rank history",grid=[0,0],size=30,font="courier new",align="left")
 rank_his_to_settings = PushButton(master=rank_history_box,text="Back",grid=[0,10],command=rank_history_to_settings,padx=10,pady=10)
 rank_his_show_btn = PushButton(master=rank_history_box,text="Show",grid=[5,5],command=plotHistory,padx=10,pady=10)
+rank_his_dropdown = Combo(master=rank_history_box,options=filenames,grid=[4,5])
+rank_his_picture = Picture(master=rank_history_box,grid=[10,5],width=480,height=854)
 
 #Developer page
 dev_box = Box(master=app,layout="grid",visible=False)

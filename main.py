@@ -1,4 +1,4 @@
-from guizero import App,PushButton,Text,Box,Picture,TextBox,Combo
+from guizero import App,PushButton,Text,Box,Picture,TextBox,Combo,Slider
 from os import walk,rename
 import os
 from random import shuffle
@@ -154,19 +154,26 @@ def chooseCompetitors(stage=None):
     final_options.append(options[chosen_index])
     return final_options
 
-def totalRankingsGraph():
+def totalRankingsGraph(num):
     """looks for the top 5 ratings
     pairs item names as key with their rating as value in a dictionary"""
     global population
+    if num > len(population):
+        return None
     rankDict = {}
     for item in population:
         rankDict[item.name] = item.rating
-    top5Dict = dict(sorted(rankDict.items(), key = itemgetter(1), reverse = True)[:5])
+    top5Dict = dict(sorted(rankDict.items(), key = itemgetter(1), reverse = True)[:num])
     return top5Dict
 
 def simulateRankedPlay(num):
     for i in range(num):
         item1Winner()
+
+def populationSort():
+    global population
+    newlist = sorted(population, key=lambda x: x.rating, reverse=True)
+    return newlist
 
 #GUIZERO functions
 def item1Winner():
@@ -191,7 +198,7 @@ def nextComp():
 
 def displayTop5Ratings():
     global top5_rated_text_list
-    top5Dict = totalRankingsGraph()
+    top5Dict = totalRankingsGraph(5)
     counter = 0
     for item in top5Dict:
         counter += 1
@@ -245,6 +252,19 @@ def current_most_frequent_voted():
             pr = item
             mx = len(item.ratingHistory)
     print(pr)
+
+def total_recall():
+    global population
+    population = populationSort()
+    total_graph = [obj.toDict() for obj in population]
+    total_graph = total_graph[:int(dev_total_recall_slider.value)]
+    for item in total_graph:
+        plt.plot(item["ratingHistory"],label=item["name"])
+    plt.legend()
+    plt.grid(visible=True)
+    plt.title(label="Top " + str(dev_total_recall_slider.value) + " rated items")
+    plt.show()
+
 #GUI changing page function
 def home_to_settings():
     home_box.hide()
@@ -338,6 +358,8 @@ dev_simulate = PushButton(master=dev_box,text="Simulate",grid=[7,5],command=dev_
 dev_to_settings_btn = PushButton(master=dev_box,text="Back",grid=[0,10],command=dev_to_settings,padx=10,pady=10,align="left")
 dev_reset_btn = PushButton(master=dev_box,text="FULL RESET",grid=[0,6],command=fullReset,padx=10,pady=10,align="left")
 dev_most_history_btn = PushButton(master=dev_box,text="History",grid=[0,7],command=current_most_frequent_voted,padx=10,pady=10,align="left")
+dev_total_recall_btn = PushButton(master=dev_box,text="Full graph",grid=[7,6],command=total_recall,padx=10,pady=10,align="left")##
+dev_total_recall_slider = Slider(master=dev_box,start=0,end=len(population),grid=[6,6])
 
 #Comparing items page
 comp_box = Box(master=app,layout="grid",visible=False)

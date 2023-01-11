@@ -1,8 +1,10 @@
 from guizero import App,PushButton,Text,Box,Picture,TextBox,Combo
 from os import walk,rename
+import os
 from random import shuffle
 import matplotlib. pyplot as plt
 from operator import itemgetter
+import json
 
 PATH = "temp/"
 filenames = next(walk(PATH), (None, None, []))[2]  # [] if no file
@@ -15,20 +17,24 @@ population = []
 class Item:
     """item class encapsulates each rated item carrying its current rating
     as well as carrying its rating history as an 1d array"""
-    def __init__(self,name):
+    def __init__(self,name,rating=1500,ratingHistory=[1500]):
         self.name = name
-        self.rating = 1500
-        self.ratingHistory = []
+        self.rating = rating
+        self.ratingHistory = ratingHistory
     def resetRating(self):
         self.rating = 1500
     def resetHistory(self):
         self.ratingHistory.clear()
+        self.ratingHistory = [1500]
     def updateStats(self,newRating):
-        self.ratingHistory.append(self.rating)
+        self.ratingHistory.append(round(newRating))
         if newRating <= 0:
             self.rating = 0
         else:
             self.rating = round(newRating)
+    def toDict(self):
+        return {"name":self.name,"rating":self.rating,"ratingHistory":self.ratingHistory}
+
     def __str__(self):
         print_str = ""
         print_str += "Name: " + str(self.name) + "\n"
@@ -94,12 +100,22 @@ def fullReset():
     for element in population:
         element.resetRating()
         element.resetHistory()
+    if os.path.exists("db.json"):
+        os.remove("db.json")
 
 def initialisePopulation():
     global filenames
     global population
-    for i in range(len(filenames)):
-        population.append(Item(filenames[i]))
+    if os.path.exists("db.json"):#if existing file save
+        with open('db.json', 'r') as openfile:
+            json_object = json.load(openfile)
+            openfile.close()
+        for item in json_object:
+            population.append(Item(name=item["name"],rating=item["rating"],ratingHistory=item["ratingHistory"]))
+        print("file successfully loaded")
+    else:#if no save data
+        for i in range(len(filenames)):
+            population.append(Item(filenames[i]))
 
 def chooseCompetitors(stage=None):
     global population
@@ -152,14 +168,15 @@ def simulateRankedPlay(num):
     for i in range(num):
         item1Winner()
 
-
 #GUIZERO functions
 def item1Winner():
     mainStage.stageItem1Winner()
     nextComp()
+
 def item2Winner():
     mainStage.stageItem2Winner()
     nextComp()
+
 def resetPhotos():
     picture1.image=PATH+mainStage.item1.name
     picture2.image=PATH+mainStage.item2.name
@@ -196,6 +213,7 @@ def plotHistory(object=None):
     else:
         rankHistory = object.ratingHistory
         plt.plot(rankHistory)
+        plt.grid(visible=True)
         plt.show()
 
 def dev_simulate_button():
@@ -208,6 +226,14 @@ def dev_simulate_button():
             print("only simulate 100 or less at a time")
     else:
         print("enter a number into the text box")
+
+def save_progress():
+    settings_to_home()
+    results = [obj.toDict() for obj in population]
+    jsdata = json.dumps(results,indent=4)
+    with open("db.json", "w") as outfile:
+        outfile.write(jsdata)
+        outfile.close()
 
 #GUI changing page function
 def home_to_settings():
@@ -268,10 +294,11 @@ home_quit_btn = PushButton(master=home_box,text="Quit",grid=[0,10],command=quit_
 #Settings page
 settings_box = Box(master=app,layout="grid",visible=False)
 settings_title = Text(master=settings_box,text="Settings",grid=[5,0],size=30,font="courier new")
-settings_home_btn = PushButton(master=settings_box,text="Home",grid=[4,6],command=settings_to_home,padx=10,pady=10)
+settings_home_btn = PushButton(master=settings_box,text="Home",grid=[4,6],command=settings_to_home,padx=10,pady=10,align="right")
 settings_top5_btn = PushButton(master=settings_box,text="Display top 5 rated",grid=[6,5],command=displayTop5Ratings,padx=10,pady=10,align="left")
 settings_rank_history_btn = PushButton(master=settings_box,text="Individual item rank history",grid=[6,6],command=settings_to_rank_history,padx=10,pady=10,align="left")
-settings_dev_btn = PushButton(master=settings_box,text="Dev",grid=[4,5],command=settings_to_dev,padx=10,pady=10)
+settings_dev_btn = PushButton(master=settings_box,text="DEV",grid=[4,5],command=settings_to_dev,padx=10,pady=10,align="right")
+settings_save_btn = PushButton(master=settings_box,text="SAVE",grid=[5,5],command=save_progress,padx=10,pady=10)
 
 #Top 5 ratings page
 top5_ratings_box = Box(master=app,layout="grid",visible=False)
@@ -295,11 +322,11 @@ rank_his_cur_rank = Text(master=rank_history_box,text="",grid=[10,6],size=30,fon
 
 #Developer page
 dev_box = Box(master=app,layout="grid",visible=False)
-dev_title = Text(master=dev_box,text="Dev options",grid=[0,0],size=30,font="courier new",align="left")
-dev_simulate = PushButton(master=dev_box,text="Simulate",grid=[1,5],command=dev_simulate_button,padx=10,pady=10)###
-dev_sim_input = TextBox(master=dev_box,grid=[0,5])
-dev_to_settings_btn = PushButton(master=dev_box,text="Back",grid=[0,10],command=dev_to_settings,padx=10,pady=10)
-dev_reset_btn = PushButton(master=dev_box,text="FULL RESET",grid=[0,6],command=fullReset,padx=10,pady=10)
+dev_title = Text(master=dev_box,text="Dev options",grid=[5,0],size=30,font="courier new")
+dev_sim_input = TextBox(master=dev_box,grid=[6,5],align="left")
+dev_simulate = PushButton(master=dev_box,text="Simulate",grid=[7,5],command=dev_simulate_button,padx=10,pady=10,align="left")
+dev_to_settings_btn = PushButton(master=dev_box,text="Back",grid=[0,10],command=dev_to_settings,padx=10,pady=10,align="left")
+dev_reset_btn = PushButton(master=dev_box,text="FULL RESET",grid=[0,6],command=fullReset,padx=10,pady=10,align="left")
 
 #Comparing items page
 comp_box = Box(master=app,layout="grid",visible=False)

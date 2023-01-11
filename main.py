@@ -20,7 +20,7 @@ class Item:
     def __init__(self,name,rating=1500,ratingHistory=[1500]):
         self.name = name
         self.rating = rating
-        self.ratingHistory = ratingHistory
+        self.ratingHistory = ratingHistory.copy()
     def resetRating(self):
         self.rating = 1500
     def resetHistory(self):

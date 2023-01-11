@@ -212,7 +212,9 @@ def plotHistory(object=None):
         return None
     else:
         rankHistory = object.ratingHistory
-        plt.plot(rankHistory)
+        plt.title("Interesting ranking graph")
+        plt.plot(rankHistory,label=object.name)
+        plt.legend()
         plt.grid(visible=True)
         plt.show()
 
@@ -235,6 +237,14 @@ def save_progress():
         outfile.write(jsdata)
         outfile.close()
 
+def current_most_frequent_voted():
+    mx = 0
+    pr = None
+    for item in population:
+        if len(item.ratingHistory) > mx:
+            pr = item
+            mx = len(item.ratingHistory)
+    print(pr)
 #GUI changing page function
 def home_to_settings():
     home_box.hide()
@@ -327,6 +337,7 @@ dev_sim_input = TextBox(master=dev_box,grid=[6,5],align="left")
 dev_simulate = PushButton(master=dev_box,text="Simulate",grid=[7,5],command=dev_simulate_button,padx=10,pady=10,align="left")
 dev_to_settings_btn = PushButton(master=dev_box,text="Back",grid=[0,10],command=dev_to_settings,padx=10,pady=10,align="left")
 dev_reset_btn = PushButton(master=dev_box,text="FULL RESET",grid=[0,6],command=fullReset,padx=10,pady=10,align="left")
+dev_most_history_btn = PushButton(master=dev_box,text="History",grid=[0,7],command=current_most_frequent_voted,padx=10,pady=10,align="left")
 
 #Comparing items page
 comp_box = Box(master=app,layout="grid",visible=False)

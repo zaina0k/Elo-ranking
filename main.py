@@ -8,7 +8,7 @@ import json
 from Item import Item
 from Stage import Stage
 
-PATH = "temp/"
+PATH = "photos/"
 filenames = next(walk(PATH), (None, None, []))[2]  # [] if no file
 try:
     filenames.remove(".DS_Store")

@@ -22,7 +22,8 @@ The JSON file acts as a local database to save and load the rating and progress 
 
 
 
-![image](https://user-images.githubusercontent.com/70727546/212143466-9f73c320-77d6-41e1-a9fb-089af60216a6.jpeg)
+![image](https://user-images.githubusercontent.com/70727546/212165809-a0203582-ae58-4bbc-a13c-6eb95fd56711.jpeg)
+
 Figure 1:
 Showcasing the photo comparison GUI. There are 2 photos with a button either side for the user to choose a "winner"
 

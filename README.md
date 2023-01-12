@@ -35,3 +35,8 @@ Showcasing the individual rank feature. A drop down box allows the user to selec
 ![image](https://user-images.githubusercontent.com/70727546/212143839-b99143ff-d743-4034-b4a7-c21365f28369.jpeg)
 Figure 3:
 Showcasing the group rank feature. Using a slider the user can choose a set amount of picture item graphs to plot. This overlay allows the user to view the progression over time. (slider organises by the best currently rated photos. i.e. 5 on the slider will plot the top 5 ranked photos)
+
+![image](https://user-images.githubusercontent.com/70727546/212163128-df650da2-7fdb-49d0-8919-3681c213fa9c.jpeg)
+
+Figure 4:
+Showcasing the flow of data within the program

@@ -41,3 +41,5 @@ Showcasing the group rank feature. Using a slider the user can choose a set amou
 
 Figure 4:
 Showcasing the flow of data within the program
+
+note: all pictures taken by yours truly

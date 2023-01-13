@@ -20,7 +20,26 @@ JSON (https://docs.python.org/3/library/json.html)
 A library that allows the picture item objects to be serialised and saved into a file that is stored in the current directory.
 The JSON file acts as a local database to save and load the rating and progress of the photo item objects.
 
-Rank based matchmaking (main.py chooseCompetitors function) This function uses the random module in tandem with an array (population) that stores all the picture item objects. It selects the items to stage for comparison semi-randomly. First it will check if item1 (the left picture) was the same as last time - this makes it so that at least 1 of the pictures will always be different and not get stuck comparing the same pictures multiple times in a row. Next to select item2 (the right picture) it randomly selects 3 items (different to item1) and out of them selects which has the closest rank to item1. The number of items it initially selects (var: options) for item2 can be increased in order to increase the level of matchmaking. However, it must always be less than the total population. This function allows for the program to simulate a fair play structure by comparing similarly ranked items, whilst also allowing the randomness to extend a range of comparisons.
+  
+List of features:  
+Start page:  
+- 2 photo items displayed on GUI  
+- Labels for photo items from their file name  
+- Buttons for user to "choose" each option - refreshes to new options when an option has been selected  
+- Rank based matchmaking (main.py chooseCompetitors function) This function uses the random module in tandem with an array (population) that stores all the picture item objects. It selects the items to stage for comparison semi-randomly. First it will check if item1 (the left picture) was the same as last time - this makes it so that at least 1 of the pictures will always be different and not get stuck comparing the same pictures multiple times in a row. Next to select item2 (the right picture) it randomly selects 3 items (different to item1) and out of them selects which has the closest rank to item1. The number of items it initially selects (var: options) for item2 can be increased in order to increase the level of matchmaking. However, it must always be less than the total population. This function allows for the program to simulate a fair play structure by comparing similarly ranked items, whilst also allowing the randomness to extend a range of comparisons.  
+
+Settings page:  
+- Save button - serialises all item objects to json and stores it in a local file (db.json)  
+- Display top 5 rated - sorts population by current ranking and displays the top 5  
+- Individual item rank history - Allows user to select a photo item by its name. Once selected the photo is then displayed to the user alongside its current rating as well as a graph to show its rating history  
+
+Dev page:  
+- Simulate - Textbox alongside button that allows user to simulate the photo comparisons randomly up to 100 times. Data is stored in the photo items as usual to be saved  
+- Full graph - Slider alongside a button that allows the user to show all the item rating history charts on one graph. The number that the user chooses (e.g. 5) will be the number will be the top (5) rated items  
+- Full Reset - Clears the local database and all the program stored data  
+- History - Outputs to terminal the most frequently compared photo item  
+ 
+
 
 ![image](https://user-images.githubusercontent.com/70727546/212165809-a0203582-ae58-4bbc-a13c-6eb95fd56711.jpeg)
 

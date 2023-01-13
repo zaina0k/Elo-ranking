@@ -20,7 +20,7 @@ JSON (https://docs.python.org/3/library/json.html)
 A library that allows the picture item objects to be serialised and saved into a file that is stored in the current directory.
 The JSON file acts as a local database to save and load the rating and progress of the photo item objects.
 
-
+Rank based matchmaking (main.py chooseCompetitors function) This function uses the random module in tandem with an array (population) that stores all the picture item objects. It selects the items to stage for comparison semi-randomly. First it will check if item1 (the left picture) was the same as last time - this makes it so that at least 1 of the pictures will always be different and not get stuck comparing the same pictures multiple times in a row. Next to select item2 (the right picture) it randomly selects 3 items (different to item1) and out of them selects which has the closest rank to item1. The number of items it initially selects (var: options) for item2 can be increased in order to increase the level of matchmaking. However, it must always be less than the total population. This function allows for the program to simulate a fair play structure by comparing similarly ranked items, whilst also allowing the randomness to extend a range of comparisons.
 
 ![image](https://user-images.githubusercontent.com/70727546/212165809-a0203582-ae58-4bbc-a13c-6eb95fd56711.jpeg)
 

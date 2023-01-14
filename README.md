@@ -8,6 +8,8 @@ Elo Ranking (https://en.wikipedia.org/wiki/Elo_rating_system)
 The elo ranking system is a system devised to compare to players (in this case photos) and add or subtract (whether they win or lose) from their rating based on how likely they were to win.
 For example, all items start with the same rating (1500) and are therefore all equally likely to win or lose but an item with 400 elo more than its competition will be 10x more likely to win
 
+Modules  
+
 GUIZERO (https://lawsie.github.io/guizero/about/) 
 A tkinter based library to provide a GUI for the user.
 GUIZERO allows for the program to display the photos to be compared and contains a menu system that allows the user to view the current stats of individual photos.
